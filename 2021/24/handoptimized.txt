@@ -1,0 +1,38 @@
+a0  = neq(z0 %26 +  12, inp[ 0]) | a1  =  z0     *(25*a0  + 1) + (inp[ 0] +  1)*a0
+a2  = neq(a1 %26 +  12, inp[ 1]) | a3  =  a1     *(25*a2  + 1) + (inp[ 1] +  1)*a2
+a4  = neq(a3 %26 +  15, inp[ 2]) | a5  =  a3     *(25*a4  + 1) + (inp[ 2] + 16)*a4
+a6  = neq(a5 %26 +  -8, inp[ 3]) | a7  = (a5 /26)*(25*a6  + 1) + (inp[ 3] +  5)*a6
+a8  = neq(a7 %26 +  -4, inp[ 4]) | a9  = (a7 /26)*(25*a8  + 1) + (inp[ 4] +  9)*a8
+a10 = neq(a9 %26 +  15, inp[ 5]) | a11 =  a9     *(25*a10 + 1) + (inp[ 5] +  3)*a10
+a12 = neq(a11%26 +  14, inp[ 6]) | a13 =  a11    *(25*a12 + 1) + (inp[ 6] +  2)*a12
+a14 = neq(a13%26 +  14, inp[ 7]) | a15 =  a13    *(25*a14 + 1) + (inp[ 7] + 15)*a14
+a16 = neq(a15%26 + -13, inp[ 8]) | a17 = (a15/26)*(25*a16 + 1) + (inp[ 8] +  5)*a16
+a18 = neq(a17%26 +  -3, inp[ 9]) | a19 = (a17/26)*(25*a18 + 1) + (inp[ 9] + 11)*a18
+a20 = neq(a19%26 +  -7, inp[10]) | a21 = (a19/26)*(25*a20 + 1) + (inp[10] +  7)*a20
+a22 = neq(a21%26 +  10, inp[11]) | a23 =  a21    *(25*a22 + 1) + (inp[11] +  1)*a22
+a24 = neq(a23%26 +  -6, inp[12]) | a25 = (a23/26)*(25*a24 + 1) + (inp[12] + 10)*a24
+a26 = neq(a25%26 +  -8, inp[13]) | z   = (a25/26)*(25*a26 + 1) + (inp[13] +  3)*a26
+
+#      0    1    2    3    4    5    6    7    8    9   10   11   12   13
+a = [ 12,  12,  15,  -8,  -4,  15,  14,  14, -13,  -3,  -7,  10,  -6,  -8]
+b = [  1,   1,  16,   5,   9,   3,   2,  15,   5,  11,   7,   1,  10,   3]
+c = [  1,   1,   1,  26,  26,   1,   1,   1,  26,  26,  26,   1,  26,  26]
+z = 0
+for i in range(14):
+	v = 1 if z%26 + a[i] != in[i] else 0
+	z = z/c[i] * (25*v + 1) + (in[i] + b[i])*v
+
+when v is 0, z = z/c[i]
+when v is 1, z = z/c[i] * 26 + in[i] + b[i]
+in[i] + b[i] is always < 26 and never 0
+
+z is effectively a base 26 number
+c[i] == 26 pops the last digit
+v == 1 pushes a digit
+all digits are non-zero
+
+c[i] is 26 in 7 out of 14 cases
+in any solution, v must be 1 in at most 7 cases, and must be 0 in the last one
+when c[i] is 26, a is negative, otherwise a is positive, and is greater than 9 (i.e. greater than in[i], and thus v=1)
+so, we can only force v to be 0, when c[i] is 26:
+in[i] = in[j] + b[j] + a[i], where j is last pushed digit
