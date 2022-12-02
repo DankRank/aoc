@@ -3,8 +3,7 @@
 
 int main()
 {
-	/* rehashing code isn't particularly stable atm, so i set the bucket size high */
-	struct ht *ht = ht_create((ht_params){.nbuckets=6291469});
+	struct ht *ht = ht_create((ht_params){.nbuckets=1});
 	long maskor = 0, maskand = ~0;
 	int prem = 0;
 	for (;;) {
@@ -48,4 +47,5 @@ int main()
 	for (ht_iter it = {ht,0}; ht_next(NULL, &value, &it); )
 		sum += (long)value;
 	printf("%ld\n", sum);
+	ht_free(ht);
 }
