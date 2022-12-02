@@ -68,7 +68,7 @@ int main()
 				left++;
 			}
 		}
-		printf("%d bags left\n", left);
+		/* printf("%d bags left\n", left); */
 	} while(left);
 	printf("%d\n", bags[SHINY].reccount-1);
 }

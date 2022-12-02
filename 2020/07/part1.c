@@ -67,7 +67,7 @@ int main()
 			else
 				left++;
 		}
-		printf("%d bags left\n", left);
+		/* printf("%d bags left\n", left); */
 	} while(left);
 	int total = -1; /* exclude the shiny bag itself */
 	for (int i = 0; i < MAXBAGS; i++)

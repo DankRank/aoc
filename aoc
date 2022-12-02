@@ -110,7 +110,6 @@ local function initbuildcmds()
 	applyrule(iterpart(2015, 12, 2), sh) -- uses jq
 	applyrule(iterday(2015, 11), cat)
 	applyrule(iterday(2020), cbuild)
-	applyrule(iterday(2020, 7), cbuild_tail)
 	applyrule(iterday(2020, 16), cbuild_tail)
 	applyrule(iterday(2020, 18), cbuild_bison)
 	applyrule(iterday(2020, 19), cbuild_btyacc)
