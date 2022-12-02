@@ -151,8 +151,7 @@ int main()
 {
 	if (yyparse())
 		return 1;
-	for (int i = 0; i < 100; i++) {
+	for (int i = 0; i < 100; i++)
 		step();
-		printf("Day %d: %d\n", i+1, ls_len);
-	}
+	printf("%d\n", ls_len);
 }
