@@ -81,9 +81,6 @@ local function initbuildcmds()
 	local function python(year, day, part)
 		return ("./part%d.py <input.txt"):format(part)
 	end
-	local function python_sed(year, day, part)
-		return ("./part1.py <input.txt | sed -n %dp"):format(part)
-	end
 	local function applyrule(iter, f)
 		for year, day, part in iter do
 			buildcmds[makeid(year, day, part)] = ("export PYTHONPYCACHEPREFIX=$(pwd)/tmp; cd %d/%02d; "):format(year, day)..f(year, day, part)
@@ -98,27 +95,21 @@ local function initbuildcmds()
 	applyrule(iterday(2020, 18), cbuild_bison)
 	applyrule(iterday(2020, 19), cbuild_btyacc)
 	applyrule(iterday(2020, 20), day2020_20)
-	applyrule(iterday(2020, 21), python_sed)
+	applyrule(iterday(2020, 21), python)
 	applyrule(iterday(2020, 22), python)
 	applyrule(iterpart(2020, 23, 1), python)
 	applyrule(iterday(2020, 24), cbuild_bison)
 	applyrule(iterday(2021), python)
-	applyrule(iterday(2021, 24), python_sed)
 	applyrule(iterday(2022), python)
 end
 initbuildcmds()
-local function runtest(year, day, part)
-	local id = makeid(year, day, part)
-	local answer = answers[id]
-	if not answer then
-		return
-	end
-	io.write(("testing %s... "):format(id))
-	local cmd = buildcmds[id]
-	if not cmd then
-		print(fail_mark.." not implemented")
-		return
-	end
+local doubletest = {
+	["2020/21/part1"] = true,
+	["2020/21/part2"] = true,
+	["2021/24/part1"] = true,
+	["2021/24/part2"] = true,
+}
+local function runcheck(cmd, answer)
 	local file = io.popen(cmd, "r")
 	local result = file:read("*a")
 	local exit = {file:close()}
@@ -130,10 +121,50 @@ local function runtest(year, day, part)
 		print((fail_mark.." expected {%s} got {%s}"):format(answer, result:sub(1, -2)))
 	end
 end
+local function rundoubletest(year, day)
+	local id1 = makeid(year, day, 1)
+	local id2 = makeid(year, day, 2)
+	local answer1 = answers[id1]
+	local answer2 = answers[id2]
+	if not answer1 or not answer2 then
+		return
+	end
+	local answer = answer1.."\n"..answer2
+	io.write(("testing %d/%02d...    "):format(year, day))
+	local cmd = buildcmds[id1]
+	if not cmd then
+		print(fail_mark.." not implemented")
+		return
+	end
+	runcheck(cmd, answer)
+end
+local function runtest(year, day, part)
+	local id = makeid(year, day, part)
+	if doubletest[id] then
+		if part == 1 then
+			rundoubletest(year, day)
+		end
+		return
+	end
+	local answer = answers[id]
+	if not answer then
+		return
+	end
+	io.write(("testing %s... "):format(id))
+	local cmd = buildcmds[id]
+	if not cmd then
+		print(fail_mark.." not implemented")
+		return
+	end
+	runcheck(cmd, answer)
+end
 local CURRENT_YEAR = 2022
 local args = {...}
 if args[1] == "testyear" then
-	for year, day, part in iterday(tonumber(args[2])) do
+	args[2] = args[2] and tonumber(args[2])
+	args[3] = args[3] and tonumber(args[3])
+	args[4] = args[4] and tonumber(args[4])
+	for year, day, part in iterday(table.unpack(args, 2, 4)) do
 		runtest(year, day, part)
 	end
 elseif args[1] == "testall" then
