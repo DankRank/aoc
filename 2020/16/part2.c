@@ -90,8 +90,9 @@ int main()
 			}
 		ambig:;
 		}
-		printf("left: %d\n", left);
+		/* printf("left: %d\n", left); */
 	} while (left && left != lastleft);
+#if 0
 	for (int i = 0; i < nf; i++) {
 		printf("%2d:", i);
 		for (int j = 0; j < nf; j++) {
@@ -99,6 +100,7 @@ int main()
 		}
 		printf(" (%2d)\n", tab[i]);
 	}
+#endif
 	if (left)
 		abort();
 	long total = 1;

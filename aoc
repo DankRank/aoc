@@ -60,10 +60,6 @@ local function initbuildcmds()
 	local function sh(year, day, part)
 		return ("./part%d.sh"):format(part)
 	end
-	local function cbuild_tail(year, day, part)
-		local exe = ("../../tmp/%d_%02d_%d"):format(year, day, part)
-		return ("%s part%d.c -o %s && %s <input.txt | tail -n 1"):format(CC, part, exe, exe)
-	end
 	local function cbuild_bison(year, day, part)
 		local exe = ("../../tmp/%d_%02d_%d"):format(year, day, part)
 		return ("bison part%d.y -o %s.tab.c && %s %s.tab.c -o %s && %s <input.txt"):format(part, exe, CC, exe, exe, exe)
@@ -110,7 +106,6 @@ local function initbuildcmds()
 	applyrule(iterpart(2015, 12, 2), sh) -- uses jq
 	applyrule(iterday(2015, 11), cat)
 	applyrule(iterday(2020), cbuild)
-	applyrule(iterday(2020, 16), cbuild_tail)
 	applyrule(iterday(2020, 18), cbuild_bison)
 	applyrule(iterday(2020, 19), cbuild_btyacc)
 	applyrule(iterday(2020, 20), day2020_20)
