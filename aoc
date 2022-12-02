@@ -91,6 +91,7 @@ local function initbuildcmds()
 	applyrule(iterpart(2015, 7, 2), sh)
 	applyrule(iterpart(2015, 12, 2), sh) -- uses jq
 	applyrule(iterday(2015, 11), cat)
+	applyrule(iterday(2015, 13, 25), python)
 	applyrule(iterday(2020), cbuild)
 	applyrule(iterday(2020, 18), cbuild_bison)
 	applyrule(iterday(2020, 19), cbuild_btyacc)
@@ -104,6 +105,8 @@ local function initbuildcmds()
 end
 initbuildcmds()
 local doubletest = {
+	["2015/13/part1"] = true,
+	["2015/13/part2"] = true,
 	["2020/21/part1"] = true,
 	["2020/21/part2"] = true,
 	["2021/24/part1"] = true,
