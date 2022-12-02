@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
-import sys
-
-mod = len(sys.argv[1])
-input = [int(i)-1 for i in sys.argv[1]]
+inp = input()
+mod = len(inp)
+input = [int(i)-1 for i in inp]
 
 def step(ls, idx):
     c = ls[idx]

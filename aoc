@@ -81,9 +81,6 @@ local function initbuildcmds()
 	local function python(year, day, part)
 		return ("./part%d.py <input.txt"):format(part)
 	end
-	local function python_arg(year, day, part)
-		return ("./part%d.py \"$(cat input.txt)\""):format(part)
-	end
 	local function python_noinput(year, day, part)
 		return ("./part%d.py"):format(part)
 	end
@@ -106,7 +103,7 @@ local function initbuildcmds()
 	applyrule(iterday(2020, 20), day2020_20)
 	applyrule(iterday(2020, 21), python_sed)
 	applyrule(iterday(2020, 22), python)
-	applyrule(iterpart(2020, 23, 1), python_arg)
+	applyrule(iterpart(2020, 23, 1), python)
 	applyrule(iterday(2020, 24), cbuild_bison)
 	applyrule(iterday(2021), python)
 	applyrule(iterday(2021, 23), python_noinput)
