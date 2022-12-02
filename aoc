@@ -105,12 +105,9 @@ local function initbuildcmds()
 end
 initbuildcmds()
 local doubletest = {
-	["2015/13/part1"] = true,
-	["2015/13/part2"] = true,
-	["2020/21/part1"] = true,
-	["2020/21/part2"] = true,
-	["2021/24/part1"] = true,
-	["2021/24/part2"] = true,
+	["2015/13"] = true,
+	["2020/21"] = true,
+	["2021/24"] = true,
 }
 local function runcheck(cmd, answer)
 	local file = io.popen(cmd, "r")
@@ -133,7 +130,7 @@ local function rundoubletest(year, day)
 		return
 	end
 	local answer = answer1.."\n"..answer2
-	io.write(("testing %d/%02d...    "):format(year, day))
+	io.write(("testing %s...    "):format(id1:sub(1,7)))
 	local cmd = buildcmds[id1]
 	if not cmd then
 		print(fail_mark.." not implemented")
@@ -143,7 +140,7 @@ local function rundoubletest(year, day)
 end
 local function runtest(year, day, part)
 	local id = makeid(year, day, part)
-	if doubletest[id] then
+	if doubletest[id:sub(1,7)] then
 		if part == 1 then
 			rundoubletest(year, day)
 		end
