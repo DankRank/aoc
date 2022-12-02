@@ -9,7 +9,7 @@ end
 local function makeid(year, day, part)
 	return ("%d/%02d/part%d"):format(year, day, part)
 end
-local answers = dofile "answers.lua"
+local answers = {}
 local function iterday(year, from, to)
 	to = to or from or 25
 	from = from or 1
@@ -161,6 +161,7 @@ end
 local CURRENT_YEAR = 2022
 local args = {...}
 if args[1] == "testyear" then
+	answers = dofile "answers.lua"
 	args[2] = args[2] and tonumber(args[2])
 	args[3] = args[3] and tonumber(args[3])
 	args[4] = args[4] and tonumber(args[4])
@@ -168,6 +169,7 @@ if args[1] == "testyear" then
 		runtest(year, day, part)
 	end
 elseif args[1] == "testall" then
+	answers = dofile "answers.lua"
 	for year, day, part in iterall() do
 		runtest(year, day, part)
 	end
