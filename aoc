@@ -1,0 +1,214 @@
+#!/usr/bin/env lua5.2
+os.execute("test -d .git && mkdir -p tmp")
+local success_mark =  "[\xe2\x9c\x93]"
+local fail_mark = "[\xe2\x9c\x97]"
+if os.execute("test -t 1") then
+	success_mark =  "\r\x1b[25C[\x1b[1;32m\xe2\x9c\x93\x1b[m]"
+	fail_mark = "\r\x1b[25C[\x1b[1;31m\xe2\x9c\x97\x1b[m]"
+end
+local function makeid(year, day, part)
+	return ("%d/%02d/part%d"):format(year, day, part)
+end
+local answers = dofile "answers.lua"
+local function iterday(year, from, to)
+	to = to or from or 25
+	from = from or 1
+	return coroutine.wrap(function()
+		for day = from, to do
+			coroutine.yield(year, day, 1)
+			if day ~= 25 then
+				coroutine.yield(year, day, 2)
+			end
+		end
+		coroutine.yield(nil)
+	end)
+end
+local function iterall()
+	return coroutine.wrap(function()
+		for year = 2015, 2022 do
+			for day = 1, 24 do
+				coroutine.yield(year, day, 1)
+				coroutine.yield(year, day, 2)
+			end
+			coroutine.yield(year, 25, 1)
+		end
+		coroutine.yield(nil)
+	end)
+end
+local function iterpart(year, day, part)
+	return coroutine.wrap(function()
+		coroutine.yield(year, day, part)
+		coroutine.yield(nil)
+	end)
+end
+local buildcmds = {
+}
+local function initbuildcmds()
+	local CC = "gcc -O2"
+	local function cbuild(year, day, part)
+		local exe = ("../../tmp/%d_%02d_%d"):format(year, day, part)
+		return ("%s part%d.c -o %s && %s <input.txt"):format(CC, part, exe, exe)
+	end
+	local function cbuild_libcrypto(year, day, part)
+		-- needs libssl-dev
+		local exe = ("../../tmp/%d_%02d_%d"):format(year, day, part)
+		return ("%s part%d.c -lcrypto -o %s && %s"):format(CC, part, exe, exe)
+	end
+	local function cat(year, day, part)
+		return ("cat part%d.txt"):format(part)
+	end
+	local function sh(year, day, part)
+		return ("./part%d.sh"):format(part)
+	end
+	local function cbuild_tail(year, day, part)
+		local exe = ("../../tmp/%d_%02d_%d"):format(year, day, part)
+		return ("%s part%d.c -o %s && %s <input.txt | tail -n 1"):format(CC, part, exe, exe)
+	end
+	local function cbuild_bison(year, day, part)
+		local exe = ("../../tmp/%d_%02d_%d"):format(year, day, part)
+		return ("bison part%d.y -o %s.tab.c && %s %s.tab.c -o %s && %s <input.txt"):format(part, exe, CC, exe, exe, exe)
+	end
+	local function cbuild_bison2020_24_2(year, day, part)
+		local exe = ("../../tmp/%d_%02d_%d"):format(year, day, part)
+		return ("bison part%d.y -o %s.tab.c && %s %s.tab.c -o %s && %s <input.txt | tail -n 1 | cut -d' ' -f3")
+			:format(part, exe, CC, exe, exe, exe)
+	end
+	local function cbuild_btyacc(year, day, part)
+		local exe = ("../../tmp/%d_%02d_%d"):format(year, day, part)
+		-- yacc from https://invisible-island.net/byacc/ compiled with --enable-btyacc
+		-- the other btyacc also works, but it doesn't have the -o option
+		local btyacc = "../../tmp/yacc -B"
+		return ("%s part%d.y -o %s.tab.c && %s %s.tab.c -o %s && %s <input.txt"):format(btyacc, part, exe, CC, exe, exe, exe)
+	end
+	local function day2020_20(year, day, part)
+		if part == 1 then
+			return "./mulcorners.sh"
+		else
+			return "./find.py <stitched.txt"
+		end
+	end
+	local function python(year, day, part)
+		return ("./part%d.py <input.txt"):format(part)
+	end
+	local function python_arg(year, day, part)
+		return ("./part%d.py \"$(cat input.txt)\""):format(part)
+	end
+	local function python_noinput(year, day, part)
+		return ("./part%d.py"):format(part)
+	end
+	local function python_sed(year, day, part)
+		return ("./part1.py <input.txt | sed -n %dp"):format(part)
+	end
+	local function applyrule(iter, f)
+		for year, day, part in iter do
+			buildcmds[makeid(year, day, part)] = ("export PYTHONPYCACHEPREFIX=$(pwd)/tmp; cd %d/%02d; "):format(year, day)..f(year, day, part)
+		end
+	end
+	applyrule(iterday(2015, 1, 12), cbuild)
+	applyrule(iterday(2015, 4), cbuild_libcrypto)
+	applyrule(iterpart(2015, 7, 2), sh)
+	applyrule(iterpart(2015, 12, 2), sh) -- uses jq
+	applyrule(iterday(2015, 11), cat)
+	applyrule(iterday(2020), cbuild)
+	applyrule(iterday(2020, 7), cbuild_tail)
+	applyrule(iterday(2020, 16), cbuild_tail)
+	applyrule(iterday(2020, 18), cbuild_bison)
+	applyrule(iterday(2020, 19), cbuild_btyacc)
+	applyrule(iterday(2020, 20), day2020_20)
+	applyrule(iterday(2020, 21), python_sed)
+	applyrule(iterday(2020, 22), python)
+	applyrule(iterpart(2020, 23, 1), python_arg)
+	applyrule(iterpart(2020, 24, 1), cbuild_bison)
+	applyrule(iterpart(2020, 24, 2), cbuild_bison2020_24_2)
+	applyrule(iterday(2021), python)
+	applyrule(iterday(2021, 23), python_noinput)
+	applyrule(iterday(2021, 24), python_sed)
+	applyrule(iterday(2022), python)
+end
+initbuildcmds()
+local function runtest(year, day, part)
+	local id = makeid(year, day, part)
+	local answer = answers[id]
+	if not answer then
+		return
+	end
+	io.write(("testing %s... "):format(id))
+	local cmd = buildcmds[id]
+	if not cmd then
+		print(fail_mark.." not implemented")
+		return
+	end
+	local file = io.popen(cmd, "r")
+	local result = file:read("*a")
+	local exit = {file:close()}
+	if not exit[1] then
+		print((fail_mark.." failed to finish (%s %d)"):format(exit[2], exit[3]))
+	elseif answer.."\n" == result then
+		print(success_mark)
+	else
+		print((fail_mark.." expected {%s} got {%s}"):format(answer, result:sub(1, -2)))
+	end
+end
+local CURRENT_YEAR = 2022
+local args = {...}
+if args[1] == "testyear" then
+	for year, day, part in iterday(tonumber(args[2])) do
+		runtest(year, day, part)
+	end
+elseif args[1] == "testall" then
+	for year, day, part in iterall() do
+		runtest(year, day, part)
+	end
+elseif args[1] == "iterall" then
+	for year, day, part in iterall() do
+		print(year, day, part)
+	end
+elseif args[1] == "input" then
+	local year = args[3] and args[2] or CURRENT_YEAR
+	local day = args[3] or args[2] or error("no year specified")
+	os.execute(("curl -b ~/aoc/.git/cookies.txt -fSs https://adventofcode.com/%d/day/%d/input"):format(year, day))
+elseif args[1] == "buildyacc" then
+	os.execute([[
+		V=20221106
+		cd tmp || exit 1
+		[ -f byacc-$V.tgz ] || curl -LSso byacc-$V.tgz https://invisible-island.net/archives/byacc/byacc-$V.tgz
+		tar -xzf byacc-$V.tgz
+		cd byacc-$V || exit 1
+		rm -rf build
+		mkdir build
+		cd build || exit 1
+		../configure --enable-btyacc && make -j
+		ln -sf byacc-$V/build/yacc ../../yacc
+	]])
+elseif args[1] == "newpy" then
+	os.execute([[
+		[ -f part1.py ] || {
+			{
+			echo '#!/usr/bin/env python3'
+			echo 'try:'
+			echo '    while True:'
+			echo '        input()'
+			echo 'except EOFError:'
+			echo '    pass'
+			} > part1.py
+			chmod +x part1.py
+		}
+		[ -f part2.py ] || {
+			touch part2.py
+			chmod +x part2.py
+		}
+	]])
+elseif args[1] == "copysolve" then
+	os.execute([[
+		(
+			echo '```py'
+			cat part1.py
+			echo '```'
+			echo '```py'
+			cat part2.py
+			echo '```'
+		) | xclip -i -r -selection clipboard
+	]])
+else
+	io.stderr:write("no such command\n")
+end
