@@ -106,6 +106,7 @@ end
 initbuildcmds()
 local doubletest = {
 	["2015/13"] = true,
+	["2015/15"] = true,
 	["2020/21"] = true,
 	["2021/24"] = true,
 }
