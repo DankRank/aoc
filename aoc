@@ -110,6 +110,7 @@ local doubletest = {
 	["2015/17"] = true,
 	["2020/21"] = true,
 	["2021/24"] = true,
+	["2022/04"] = true,
 }
 local function runcheck(cmd, answer)
 	local file = io.popen(cmd, "r")
