@@ -221,9 +221,11 @@ elseif args[1] == "copysolve" then
 			echo '```py'
 			cat part1.py
 			echo '```'
-			echo '```py'
-			cat part2.py
-			echo '```'
+			[ -f part2.py ] && {
+				echo '```py'
+				cat part2.py
+				echo '```'
+			}
 		) | xclip -i -r -selection clipboard
 	]])
 else
