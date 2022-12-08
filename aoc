@@ -46,6 +46,7 @@ local buildcmds = {
 }
 local function initbuildcmds()
 	local CC = "gcc -O2"
+	local PYTHON = "python3"
 	local function cbuild(year, day, part)
 		local exe = ("../../tmp/%d_%02d_%d"):format(year, day, part)
 		return ("%s part%d.c -o %s && %s <input.txt"):format(CC, part, exe, exe)
@@ -76,11 +77,11 @@ local function initbuildcmds()
 		if part == 1 then
 			return "./mulcorners.sh"
 		else
-			return "./find.py <stitched.txt"
+			return ("%s find.py <stitched.txt"):format(PYTHON)
 		end
 	end
 	local function python(year, day, part)
-		return ("./part%d.py <input.txt"):format(part)
+		return ("%s part%d.py <input.txt"):format(PYTHON, part)
 	end
 	local function applyrule(iter, f)
 		for year, day, part in iter do
