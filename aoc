@@ -10,6 +10,7 @@ local function makeid(year, day, part)
 	return ("%d/%02d/part%d"):format(year, day, part)
 end
 local answers = {}
+local doubletest = {}
 local function iterday(year, from, to)
 	to = to or from or 25
 	from = from or 1
@@ -104,15 +105,6 @@ local function initbuildcmds()
 	applyrule(iterday(2022), python)
 end
 initbuildcmds()
-local doubletest = {
-	["2015/13"] = true,
-	["2015/15"] = true,
-	["2015/17"] = true,
-	["2015/21"] = true,
-	["2020/21"] = true,
-	["2021/24"] = true,
-	["2022/04"] = true,
-}
 local function runcheck(cmd, answer)
 	local file = io.popen(cmd, "r")
 	local result = file:read("*a")
@@ -166,6 +158,7 @@ local CURRENT_YEAR = 2022
 local args = {...}
 if args[1] == "testyear" then
 	answers = dofile "answers.lua"
+	doubletest = dofile "doubletest.lua"
 	args[2] = args[2] and tonumber(args[2])
 	args[3] = args[3] and tonumber(args[3])
 	args[4] = args[4] and tonumber(args[4])
@@ -174,6 +167,7 @@ if args[1] == "testyear" then
 	end
 elseif args[1] == "testall" then
 	answers = dofile "answers.lua"
+	doubletest = dofile "doubletest.lua"
 	for year, day, part in iterall() do
 		runtest(year, day, part)
 	end
