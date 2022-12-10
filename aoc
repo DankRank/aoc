@@ -94,6 +94,7 @@ local function initbuildcmds()
 	applyrule(iterpart(2015, 12, 2), sh) -- uses jq
 	applyrule(iterday(2015, 11), cat)
 	applyrule(iterday(2015, 13, 25), python)
+	applyrule(iterday(2016), python)
 	applyrule(iterday(2020), cbuild)
 	applyrule(iterday(2020, 18), cbuild_bison)
 	applyrule(iterday(2020, 19), cbuild_btyacc)
