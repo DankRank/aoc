@@ -1,0 +1,19 @@
+#!/usr/bin/env python3
+mapp = {
+    '...': '.',
+    '..^': '^',
+    '.^.': '.',
+    '^..': '^',
+    '.^^': '^',
+    '^.^': '.',
+    '^^.': '^',
+    '^^^': '.',
+}
+line = input()
+count = line.count('.')
+for i in range(39):
+    line = '.'+line+'.'
+    line = ''.join(mapp[line[i:i+3]] for i in range(len(line)-2))
+    count += line.count('.')
+print(count)
+
