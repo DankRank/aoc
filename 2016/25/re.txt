@@ -1,0 +1,135 @@
+===
+        cpy a d
+        cpy 4 c
+loc_02: cpy 633 b
+loc_03: inc d
+        dec b
+        jnz b loc_03
+        dec c
+        jnz c loc_02
+loc_08: cpy d a
+loc_09: jnz 0 loc_09
+        cpy a b
+        cpy 0 a
+loc_12: cpy 2 c
+loc_13: jnz b loc_15
+        jnz 1 loc_20
+loc_15: dec b
+        dec c
+        jnz c loc_13
+        inc a
+        jnz 1 loc_12
+loc_20: cpy 2 b
+loc_21: jnz c loc_23
+        jnz 1 loc_26
+loc_23: dec b
+        dec c
+        jnz 1 loc_21
+loc_26: jnz 0 loc_26
+        out b
+        jnz a loc_09
+        jnz 1 loc_08
+===
+        d = a
+        c = 4
+loc_02: b = 633
+loc_03: d += 1
+        b -= 1
+        jnz b loc_03
+        c -= 1
+        jnz c loc_02
+loc_08: a = d
+loc_09: jnz 0 loc_09
+        b = a
+        a = 0
+loc_12: c = 2
+loc_13: jnz b loc_15
+        jnz 1 loc_20
+loc_15: b -= 1
+        c -= 1
+        jnz c loc_13
+		a += 1
+        jnz 1 loc_12
+loc_20: b = 2
+loc_21: jnz c loc_23
+        jnz 1 loc_26
+loc_23: b -= 1
+        c -= 1
+        jnz 1 loc_21
+loc_26: jnz 0 loc_26
+        out b
+        jnz a loc_09
+        jnz 1 loc_08
+===
+        d = a + 633*4
+		b = 0
+        c = 0
+		loop {
+        a = d
+loc_09:
+        b = a
+        a = 0
+loc_12: c = 2
+loc_13:
+		if b != 0 {
+		b -= 1
+		c -= 1
+		if c != 0 goto loc13
+
+		a += 1
+        goto loc_12
+		}
+        b = 2
+		b -= c
+		c = 0
+        out b
+        jnz a loc_09
+		}
+===
+	d = a + 633*4
+	b = 0
+	c = 0
+	a = d
+	loop {
+        b = a
+        a = 0
+        c = 2
+		while b != 0 {
+			b -= 1
+			c -= 1
+			if c == 0 {
+				a += 1
+				c = 2
+			}
+		}
+		b = 2
+		b -= c
+		c = 0
+		out b
+		if a == 0 {
+			a = d
+		}
+	}
+===
+	d = a + 633*4
+	a = d
+	loop {
+        b = a
+        a = b//2
+		c = b%2 # except it's 2 1 instead of 0 1
+		b = 2-c
+		out b
+		if a == 0 {
+			a = d
+		}
+	}
+===
+	a = 0
+	loop {
+		if a == 0 {
+			a = in + 633*4
+		}
+		b = a%2
+        a = a//2
+		out b
+	}
