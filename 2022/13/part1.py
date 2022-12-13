@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import ast
 def compare(a,b):
     if isinstance(a, list) or isinstance(b, list):
         if not isinstance(a, list):
@@ -17,8 +18,8 @@ count = 0
 index = 1
 try:
     while True:
-        a = eval(input())
-        b = eval(input())
+        a = ast.literal_eval(input())
+        b = ast.literal_eval(input())
         if not compare(b, a):
             count += index
         index += 1

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import ast
 import functools
 def compare(a,b):
     if isinstance(a, list) or isinstance(b, list):
@@ -25,8 +26,8 @@ ls.append([[2]])
 ls.append([[6]])
 try:
     while True:
-        ls.append(eval(input()))
-        ls.append(eval(input()))
+        ls.append(ast.literal_eval(input()))
+        ls.append(ast.literal_eval(input()))
         input()
 except EOFError:
     pass
