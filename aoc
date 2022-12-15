@@ -47,6 +47,7 @@ local buildcmds = {
 local function initbuildcmds()
 	local CC = "gcc -O2"
 	local PYTHON = "python3"
+	local PYPY = "pypy3"
 	local function cbuild(year, day, part)
 		local exe = ("../../tmp/%d_%02d_%d"):format(year, day, part)
 		return ("%s part%d.c -o %s && %s <input.txt"):format(CC, part, exe, exe)
@@ -83,6 +84,9 @@ local function initbuildcmds()
 	local function python(year, day, part)
 		return ("%s part%d.py <input.txt"):format(PYTHON, part)
 	end
+	local function pypy(year, day, part)
+		return ("%s part%d.py <input.txt"):format(PYPY, part)
+	end
 	local function applyrule(iter, f)
 		for year, day, part in iter do
 			buildcmds[makeid(year, day, part)] = ("export PYTHONPYCACHEPREFIX=$(pwd)/tmp; cd %d/%02d; "):format(year, day)..f(year, day, part)
@@ -105,6 +109,7 @@ local function initbuildcmds()
 	applyrule(iterday(2020, 24), cbuild_bison)
 	applyrule(iterday(2021), python)
 	applyrule(iterday(2022), python)
+	applyrule(iterpart(2022, 15, 2), pypy)
 end
 initbuildcmds()
 local function runcheck(cmd, answer)
