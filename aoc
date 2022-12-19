@@ -46,6 +46,7 @@ local buildcmds = {
 }
 local function initbuildcmds()
 	local CC = "gcc -O2"
+	local CXX = "g++ -std=c++20 -O2"
 	local PYTHON = "python3"
 	local PYPY = "pypy3"
 	local function cbuild(year, day, part)
@@ -87,6 +88,10 @@ local function initbuildcmds()
 	local function pypy(year, day, part)
 		return ("%s part%d.py <input.txt"):format(PYPY, part)
 	end
+	local function cxxbuild(year, day, part)
+		local exe = ("../../tmp/%d_%02d_%d"):format(year, day, part)
+		return ("%s part%d.cc -o %s && %s <input.txt"):format(CXX, part, exe, exe)
+	end
 	local function applyrule(iter, f)
 		for year, day, part in iter do
 			buildcmds[makeid(year, day, part)] = ("export PYTHONPYCACHEPREFIX=$(pwd)/tmp; cd %d/%02d; "):format(year, day)..f(year, day, part)
@@ -110,9 +115,7 @@ local function initbuildcmds()
 	applyrule(iterday(2021), python)
 	applyrule(iterday(2022), python)
 	applyrule(iterpart(2022, 15, 2), pypy)
-	-- way too slow
-	buildcmds["2022/19/part1"] = nil
-	buildcmds["2022/19/part2"] = nil
+	applyrule(iterday(2022, 19), cxxbuild) -- takes 5 mins and lots of RAM
 end
 initbuildcmds()
 local function runcheck(cmd, answer)
