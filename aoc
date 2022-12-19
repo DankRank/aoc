@@ -110,6 +110,9 @@ local function initbuildcmds()
 	applyrule(iterday(2021), python)
 	applyrule(iterday(2022), python)
 	applyrule(iterpart(2022, 15, 2), pypy)
+	-- way too slow
+	buildcmds["2022/19/part1"] = nil
+	buildcmds["2022/19/part2"] = nil
 end
 initbuildcmds()
 local function runcheck(cmd, answer)
