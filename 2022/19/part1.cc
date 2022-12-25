@@ -32,9 +32,7 @@ int solver(int aa, int ba, int ca, int cb, int da, int dc, int limit)
 				s.b = cb;
 			if (s.rc == dc && s.c >= dc)
 				s.c = dc;
-			if (s.d + s.rd > maxg)
-				maxg = s.d + s.rd;
-			if (time < limit) {
+			if (time < limit - 1) {
 				if (s.ra < maxa && s.a >= aa)
 					next_states.emplace(s.a - aa + s.ra, s.b + s.rb,      s.c + s.rc,      s.d + s.rd, s.ra+1, s.rb,  s.rc,   s.rd);
 				if (s.rb < cb && s.a >= ba)
@@ -44,6 +42,10 @@ int solver(int aa, int ba, int ca, int cb, int da, int dc, int limit)
 				if (s.a >= da && s.c >= dc)
 					next_states.emplace(s.a - da + s.ra, s.b + s.rb,      s.c - dc + s.rc, s.d + s.rd, s.ra,  s.rb,   s.rc,   s.rd+1);
 				next_states.emplace(s.a + s.ra, s.b + s.rb, s.c + s.rc, s.d + s.rd, s.ra, s.rb, s.rc, s.rd);
+			} else {
+				int g = s.d + s.rd + s.rd + (int)(s.a >= da && s.c >= dc);
+				if (g > maxg)
+					maxg = g;
 			}
 		}
 	}
