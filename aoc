@@ -139,7 +139,7 @@ local function rundoubletest(year, day)
 		return
 	end
 	local answer = answer1.."\n"..answer2
-	io.write(("testing %s...    "):format(id1:sub(1,7)))
+	io.write(("testing %s...       "):format(id1:sub(1,7)))
 	local cmd = buildcmds[id1]
 	if not cmd then
 		print(fail_mark.." not implemented")
