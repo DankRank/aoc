@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 def parsetext(line):
     return [int(x) for x in line.split(',')]
 class IntcodeVM:
@@ -76,3 +77,18 @@ class IntcodeVM:
     def run(self):
         while self.step():
             pass
+if __name__ == '__main__':
+    import sys
+    if len(sys.argv) > 1:
+        with open(sys.argv[1]) as f:
+            line = f.readline().rstrip()
+    else:
+        line = input()
+    vm = IntcodeVM(parsetext(line))
+    while True:
+        vm.run()
+        print(''.join(chr(x) if 0 <= x < 128 else str(x)+'\n' for x in vm.outq), end='')
+        vm.outq = []
+        if vm.halted:
+            break
+        vm.inq = [ord(x) for x in input()+'\n']
