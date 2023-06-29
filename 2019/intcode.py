@@ -72,7 +72,7 @@ class IntcodeVM:
             self.halted = True
             return False
         else:
-            raise ValueError(f'unknown op {op} at {pc}')
+            raise ValueError(f'unknown op {op} at {self.pc}')
         return True
     def run(self):
         while self.step():

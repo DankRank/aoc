@@ -43,7 +43,7 @@ class IntcodeVM:
         elif op == 99:
             return False
         else:
-            raise ValueError(f'unknown op {op} at {pc}')
+            raise ValueError(f'unknown op {op} at {self.pc}')
         return True
     def run(self):
         while self.step():
