@@ -186,6 +186,14 @@ elseif args[1] == "testall" then
 	for year, day, part in iterall() do
 		runtest(year, day, part)
 	end
+elseif args[1] == "testocr" then
+	answers = dofile "answers.lua"
+	doubletest = dofile "doubletest.lua"
+	runtest(2016, 8, 2)
+	runtest(2019, 8, 2)
+	runtest(2019, 11, 2)
+	runtest(2021, 13, 2)
+	runtest(2022, 10, 2)
 elseif args[1] == "iterall" then
 	for year, day, part in iterall() do
 		print(year, day, part)
