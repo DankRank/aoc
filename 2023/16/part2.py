@@ -32,8 +32,11 @@ def solve(x, y, d):
             st.append(ns)
     return len(seenspot)
 
-a = max(solve(0, i, 0) for i in range(len(m)))
-b = max(solve(len(m[0])-1, i, 2) for i in range(len(m)))
-c = max(solve(i, 0, 3) for i in range(len(m[0])))
-d = max(solve(i, len(m)-1, 1) for i in range(len(m[0])))
-print(max(a, b, c, d))
+tosolve = []
+tosolve += ((0, i, 0) for i in range(len(m)))
+tosolve += ((len(m[0])-1, i, 2) for i in range(len(m)))
+tosolve += ((i, 0, 3) for i in range(len(m[0])))
+tosolve += ((i, len(m)-1, 1) for i in range(len(m[0])))
+import multiprocessing as mp
+with mp.Pool() as p:
+    print(max(p.starmap(solve, tosolve)))
