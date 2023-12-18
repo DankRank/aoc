@@ -12,12 +12,26 @@ except EOFError:
     pass
 
 # compute normals (which point inside the shape)
-shape[0].append((shape[0][0]-1)&3) # FIXME: this is just a guess. if it's wrong, change to +1
+shape[0].append((shape[0][0]-1)&3) # initial guess
 for i in range(1, len(shape)):
     if shape[i][0] == shape[i-1][2]: # convex turn
         shape[i].append(shape[i-1][0]^2)
     else: # concave turn
         shape[i].append(shape[i-1][0])
+
+# find the normal of the left-most wall
+x = 0
+minx, minn = 0, 0
+for d, r, n in shape:
+    x += dirs[d][0]*r
+    if d&1: # going vertically
+        if x < minx:
+            minx = x
+            minn = n
+if minn != 0:
+    # we guessed wrong, invert all normals
+    for i in range(len(shape)):
+        shape[i][2] ^= 2
 
 count = 0
 def checksegment(i):
@@ -29,6 +43,10 @@ def checksegment(i):
                 assert shape[i-1][2] == shape[i][2]
                 shape[i-1][1] += shape[i][1]
             else:
+                # this deals with the following situation
+                # ┌─┐  ->      ->
+                # └┐│  -> ─┬┐  ->  ┌┐
+                # ─┘└─ -> ─┘└─ -> ─┘└─
                 assert shape[i-1][2] == shape[i][2]^2
                 count += shape[i][1]
                 shape[i-1][1] -= shape[i][1]
