@@ -119,6 +119,7 @@ local function initbuildcmds()
 	applyrule(iterday(2022, 19), cxxbuild) -- takes 5 mins and lots of RAM
 	applyrule(iterday(2023), python)
 	applyrule(iterpart(2023, 23, 2), pypy)
+	-- 2023, 24, 2 uses z3
 end
 initbuildcmds()
 local function runcheck(cmd, answer)
