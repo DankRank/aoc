@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <string.h>
-#include <openssl/md5.h>
+#include "mymd5.h"
 int main() {
 	const char *key = "ckczppom";
 	char buf[512];

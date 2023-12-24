@@ -53,10 +53,9 @@ local function initbuildcmds()
 		local exe = ("../../tmp/%d_%02d_%d"):format(year, day, part)
 		return ("%s part%d.c -o %s && %s <input.txt"):format(CC, part, exe, exe)
 	end
-	local function cbuild_libcrypto(year, day, part)
-		-- needs libssl-dev
+	local function cbuild_md5(year, day, part)
 		local exe = ("../../tmp/%d_%02d_%d"):format(year, day, part)
-		return ("%s part%d.c -lcrypto -o %s && %s"):format(CC, part, exe, exe)
+		return ("%s part%d.c md5.c -o %s && %s"):format(CC, part, exe, exe)
 	end
 	local function cat(year, day, part)
 		return ("cat part%d.txt"):format(part)
@@ -98,7 +97,7 @@ local function initbuildcmds()
 		end
 	end
 	applyrule(iterday(2015, 1, 12), cbuild)
-	applyrule(iterday(2015, 4), cbuild_libcrypto)
+	applyrule(iterday(2015, 4), cbuild_md5)
 	applyrule(iterpart(2015, 7, 2), sh)
 	applyrule(iterpart(2015, 12, 2), sh) -- uses jq
 	applyrule(iterday(2015, 11), cat)
