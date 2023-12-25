@@ -122,13 +122,15 @@ local function initbuildcmds()
 end
 initbuildcmds()
 local function runcheck(cmd, answer)
+	local t1 = os.time()
 	local file = io.popen(cmd, "r")
 	local result = file:read("*a")
 	local exit = {file:close()}
+	local t2 = os.time()
 	if not exit[1] then
 		print((fail_mark.." failed to finish (%s %d)"):format(exit[2], exit[3]))
 	elseif answer.."\n" == result then
-		print(success_mark)
+		print(success_mark..(" in %ss"):format(os.difftime(t2, t1)))
 	else
 		print((fail_mark.." expected {%s} got {%s}"):format(answer, result:sub(1, -2)))
 	end
