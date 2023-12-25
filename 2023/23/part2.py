@@ -61,14 +61,11 @@ start, target = 0, 1
 for i in adj:
     if i not in relabel:
         relabel[i] = len(relabel)
-print(adj)
 adj = {relabel[i]: {relabel[j]: k for j, k in v.items()} for i, v in adj.items()}
-print(adj)
 
 maxdist = 0
 prev_states, next_states = set(), {(start, 0, 0)}
 while len(next_states):
-    print(maxdist, len(next_states))
     prev_states, next_states = next_states, set()
     for s, dist, history in prev_states:
         history |= 1<<s
