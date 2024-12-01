@@ -178,7 +178,7 @@ local args = {...}
 if args[1] == "testyear" then
 	answers = dofile "answers.lua"
 	doubletest = dofile "doubletest.lua"
-	args[2] = args[2] and tonumber(args[2])
+	args[2] = args[2] and tonumber(args[2]) or CURRENT_YEAR
 	args[3] = args[3] and tonumber(args[3])
 	args[4] = args[4] and tonumber(args[4])
 	for year, day, part in iterday(table.unpack(args, 2, 4)) do
