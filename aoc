@@ -224,6 +224,9 @@ elseif args[1] == "newpy" then
 		[ -f part1.py ] || {
 			{
 			echo '#!/usr/bin/env python3'
+			echo 'import sys'
+			echo 'm = [line.rstrip() for line in sys.stdin]'
+			echo 'm = [[int(x) for x in line.rstrip().split()] for line in sys.stdin]'
 			echo 'try:'
 			echo '    while True:'
 			echo '        input()'
