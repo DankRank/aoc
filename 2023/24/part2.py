@@ -5,7 +5,7 @@ m = [sum((tuple(int(x) for x in s.split(', ')) for s in line.rstrip().split(' @ 
 s = z3.Solver()
 res, x, y, z, dx, dy, dz = z3.BitVecs('res x y z dx dy dz', 64)
 s.add(res == x+y+z)
-for i, v in enumerate(m):
+for i, v in enumerate(m[:4]): # [:4] works for my input
     x1, y1, z1, dx1, dy1, dz1 = v
     t1 = z3.BitVec(f't{i}', 64)
     s.add(t1 > 0)
