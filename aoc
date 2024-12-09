@@ -81,12 +81,15 @@ local function initbuildcmds()
 			return ("%s find.py <stitched.txt"):format(PYTHON)
 		end
 	end
-	local function python(year, day, part)
+	local function python_only(year, day, part)
+		-- Python 3.11
 		return ("%s part%d.py <input.txt"):format(PYTHON, part)
 	end
 	local function pypy(year, day, part)
+		-- Python 3.9 via PyPy
 		return ("%s part%d.py <input.txt"):format(PYPY, part)
 	end
+	python = python_only
 	local function cxxbuild(year, day, part)
 		local exe = ("../../tmp/%d_%02d_%d"):format(year, day, part)
 		return ("%s part%d.cc -o %s && %s <input.txt"):format(CXX, part, exe, exe)
@@ -103,6 +106,8 @@ local function initbuildcmds()
 	applyrule(iterday(2015, 11), cat)
 	applyrule(iterday(2015, 13, 25), python)
 	applyrule(iterday(2016), python)
+	applyrule(iterday(2016, 5), python_only) -- poor hashlib performance on pypy
+	applyrule(iterpart(2016, 14, 2), python_only) -- ditto
 	applyrule(iterday(2019), python)
 	applyrule(iterday(2020), cbuild)
 	applyrule(iterday(2020, 18), cbuild_bison)
@@ -117,10 +122,11 @@ local function initbuildcmds()
 	applyrule(iterpart(2022, 15, 2), pypy)
 	applyrule(iterday(2022, 19), cxxbuild) -- takes 5 mins and lots of RAM
 	applyrule(iterday(2023), python)
+	applyrule(iterpart(2023, 5, 2), python_only) -- bisect_right key argument (3.10+)
 	applyrule(iterpart(2023, 23, 2), pypy)
 	-- 2023, 24, 2 uses z3
 	applyrule(iterday(2024), python)
-	applyrule(iterday(2024, 09), pypy)
+	applyrule(iterday(2024, 09, 2), pypy)
 end
 initbuildcmds()
 local function runcheck(cmd, answer)

@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env pypy3
 import sys
 from collections import Counter
 elves = set((x, y) for y, line in enumerate(sys.stdin.read().splitlines()) for x, c in enumerate(line) if c == '#')
