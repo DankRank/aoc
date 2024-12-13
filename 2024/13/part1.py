@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-from fractions import Fraction
 m = []
 try:
     while True:
@@ -15,12 +14,11 @@ def solve():
     count = 0
     for ax, ay, bx, by, px, py in m:
         det = ax*by - bx*ay
-        idet = Fraction(1, det)
-        a = px*by*idet + py*-bx*idet
-        b = px*-ay*idet + py*ax*idet
-        if a.denominator != 1 or b.denominator != 1:
+        a = px*by + py*-bx
+        b = px*-ay + py*ax
+        if a % det or b % det:
             continue
-        count += 3*a + b
+        count += (3*a + b) // det
     return count
 
 print(solve())
