@@ -16,7 +16,7 @@ def reachable(i):
         if y < h-1 and (x, y+1) not in blocked:
             yield x, y+1
     next_states = {(0, 0)}
-    visited = set()
+    visited = set(next_states)
     generation = 0
     while len(next_states):
         if (w-1, h-1) in next_states:

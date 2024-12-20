@@ -16,7 +16,7 @@ def neighbors(s):
         yield x, y+1
 
 next_states = {(0, 0)}
-visited = set()
+visited = set(next_states)
 generation = 0
 while (w-1, h-1) not in next_states:
     generation += 1
