@@ -41,12 +41,20 @@ dist1 = bfs1(start)
 dist2 = bfs1(finish)
 limit = dist1[finish]-100
 
+def sorted_by_value(d):
+    return sorted(d.items(), key=lambda x: x[1])
+dist1v = sorted_by_value(dist1)
+dist2v = sorted_by_value(dist2)
+
 count = 0
-for (csx, csy), d1 in dist1.items():
-    for (cex, cey), d2 in dist2.items():
-        if d1 + d2 <= limit:
-            d3 = abs(cex-csx) + abs(cey-csy)
-            if d3 <= 20:
-                if d1 + d3 +  d2 <= limit:
-                    count += 1
+for (csx, csy), d1 in dist1v:
+    if d1 > limit:
+        break
+    for (cex, cey), d2 in dist2v:
+        if d1 + d2 > limit:
+            break
+        d3 = abs(cex-csx) + abs(cey-csy)
+        if d3 <= 20:
+            if d1 + d3 +  d2 <= limit:
+                count += 1
 print(count)
