@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env pypy3
 import sys
 m = [line.rstrip() for line in sys.stdin]
 w, h = len(m[0]), len(m)

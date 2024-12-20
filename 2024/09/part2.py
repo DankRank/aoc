@@ -1,4 +1,4 @@
-#!/usr/bin/env pypy3
+#!/usr/bin/env python3
 line = [int(x) for x in input()]
 assert len(line) % 2
 i = 0
