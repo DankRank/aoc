@@ -14,6 +14,7 @@ local doubletest = {}
 local function iterday(year, from, to)
 	to = to or from or 25
 	from = from or 1
+	if to < from then error("iterday: " .. to .. " < " .. from) end
 	return coroutine.wrap(function()
 		for day = from, to do
 			coroutine.yield(year, day, 1)
