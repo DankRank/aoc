@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import sys
+import functools
 m = [line.rstrip() for line in sys.stdin]
 kp1coords = {
     '7': (0, 0),
@@ -24,6 +25,7 @@ kp2coords = {
 }
 kp2exclude = (0, 0)
 
+@functools.cache
 def move(src, dst, exclude):
     dx = dst[0]-src[0]
     dy = dst[1]-src[1]
