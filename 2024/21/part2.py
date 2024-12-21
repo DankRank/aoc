@@ -54,9 +54,16 @@ def typein(s, coords, movefunc, stringclass=str):
 
 def deepcache(movefunc):
     cache = {}
+    useless = {
+        ((0, 1), (2, 1)), # <>
+        ((2, 1), (0, 1)), # ><
+        ((1, 0), (1, 1)), # ^v
+        ((1, 1), (1, 0)), # v^
+    }
     for src in kp2coords.values():
         for dst in kp2coords.values():
-            cache[src, dst] = movefunc(src, dst)
+            if (src, dst) not in useless:
+                cache[src, dst] = movefunc(src, dst)
     return lambda src, dst: cache[src, dst]
 
 @deepcache
