@@ -43,8 +43,9 @@ def move(src, dst, exclude):
     else:
         return mov1 + mov2 + 'A',
 
-def typein(s, coords, movefunc, ns=''):
+def typein(s, coords, movefunc, stringclass=str):
     pos = coords['A']
+    ns = stringclass()
     for ch in s:
         dst = coords[ch]
         ns += movefunc(pos, dst)
@@ -66,7 +67,7 @@ def movebot3(src, dst):
 def wrapmove(moveprev, stringclass=str, exclude=kp2exclude):
     def movebot(src, dst):
         paths = move(src, dst, exclude)
-        paths = [typein(path, kp2coords, moveprev, stringclass()) for path in paths]
+        paths = (typein(path, kp2coords, moveprev, stringclass) for path in paths)
         return min(paths, key=len)
     return movebot
 
@@ -98,6 +99,6 @@ movebot1 = wrapmove(movebot2, NoConcatString, kp1exclude)
 
 count = 0
 for s in m:
-    ns = typein(s, kp1coords, movebot1, NoConcatString())
+    ns = typein(s, kp1coords, movebot1, NoConcatString)
     count += len(ns) * int(s[:-1])
 print(count)
