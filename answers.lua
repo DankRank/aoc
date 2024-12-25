@@ -529,5 +529,5 @@ return {
 	["2024/23/part2"] = "ac,ed,fh,kd,lf,mb,om,pe,qt,uo,uy,vr,wg",
 	["2024/24/part1"] = "58367545758258",
 	["2024/24/part2"] = "bpf,fdw,hcc,hqc,qcw,z05,z11,z35",
-	["2024/25/part1"] = nil,
+	["2024/25/part1"] = "3495",
 }
