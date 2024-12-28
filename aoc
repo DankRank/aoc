@@ -106,6 +106,7 @@ local function initbuildcmds()
 	applyrule(iterday(2016), python)
 	applyrule(iterday(2016, 5), python_only) -- poor hashlib performance on pypy
 	applyrule(iterpart(2016, 14, 2), python_only) -- ditto
+	applyrule(iterday(2018), python)
 	applyrule(iterday(2019), python)
 	applyrule(iterday(2020), cbuild)
 	applyrule(iterday(2020, 18), cbuild_bison)
